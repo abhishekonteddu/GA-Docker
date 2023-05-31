@@ -1,8 +1,7 @@
 ---
 name: Build and Push Golang Image to AWS ECR
 on:
-  push:
-   branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build-and-push:
@@ -29,11 +28,36 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: docker
-        IMAGE_TAG: "$github.run_number" 
-                             
+#        IMAGE_TAG: v1.0.0
+        
+      - name: Retrieve current image tag
+        id: get_tag
+        run: |
+          echo "::set-output name=tag::$(git show-ref --tags --abbrev=0)"
+
+      - name: Increment image tag
+        id: increment_tag
+        run: |
+          # Retrieve the tag from the previous step's output
+          current_tag=${{ steps.get_tag.outputs.tag }}
+          
+          # Parse the tag and increment it
+          major_version=$(echo $current_tag | cut -d. -f1)
+          minor_version=$(echo $current_tag | cut -d. -f2)
+          patch_version=$(echo $current_tag | cut -d. -f3)
+          new_patch_version=$((patch_version + 1))
+          new_tag="${major_version}.${minor_version}.${new_patch_version}"
+
+          echo "::set-output name=tag::$new_tag"
+
+      - name: Update image tag
+        run: |
+          # Retrieve the updated tag from the previous step's output
+          new_tag=${{ steps.increment_tag.outputs.tag }}
+                                   
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$new_tag .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$new_tag
         echo $ECR_REGISTRY
         echo $ECR_REPOSITORY
         echo $IMAGE_TAG
