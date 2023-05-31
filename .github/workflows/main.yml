@@ -36,10 +36,10 @@ jobs:
         VNUM2: ${arr[1]}
         VNUM3: ${arr[2]}
         
-        VNUM4: VNUM2+1
-        VNUM5: VNUM3+1
+        VNUM4: ${VNUM2+1}
+        VNUM5: ${VNUM3+1}
 
-        IMAGE_TAG: VNUM1+VNUM4+VNUM5
+        IMAGE_TAG: ${VNUM1}+${VNUM4}+${VNUM5}
         
                                    
       run: |
