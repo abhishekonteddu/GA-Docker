@@ -32,11 +32,9 @@ jobs:
         CURRENT_VERSION: v1.0.0
         
         arr: (${string//"IMAGE_TAG"/ })
-        VNUM1: ${IMAGE_TAG[0]}
-        VNUM2: ${IMAGE_TAG[1]}
-        VNUM3: ${IMAGE_TAG[2]}
-
-        if: ${{ CURRENT_VERSION == v1.0.0 }}
+        VNUM1: ${arr[0]}
+        VNUM2: ${arr[1]}
+        VNUM3: ${arr[2]}
         
         VNUM4: VNUM2+1
         VNUM5: VNUM3+1
