@@ -1,7 +1,8 @@
 ---
 name: Build and Push Golang Image to AWS ECR
 on:
-  workflow_dispatch:
+  push:
+   branches: [ "main" ]
 
 jobs:
   build-and-push:
@@ -35,7 +36,7 @@ jobs:
         VNUM2: ${IMAGE_TAG[1]}
         VNUM3: ${IMAGE_TAG[2]}
 
-        if: ${{ IMAGE_TAG1 == v1.0.0 }}
+        if: ${{ CURRENT_VERSION == v1.0.0 }}
         
         VNUM4: VNUM2+1
         VNUM5: VNUM3+1
