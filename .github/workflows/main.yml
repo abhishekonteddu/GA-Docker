@@ -28,6 +28,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: docker
+        run: echo "hello"
 #        IMAGE_TAG: v1.0.0
         
     - name: Retrieve current image tag
