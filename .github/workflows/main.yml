@@ -35,7 +35,7 @@ jobs:
         ECR_REPOSITORY: docker
         CURRENT_TAG: v1.1.0
  #       NEW_TAG: $((CURRENT_TAG + 1))
-        IMAGE_TAG: "${ECR_REPOSITORY}:${CURRENT_TAG}"
+        IMAGE_TAG: ${CURRENT_TAG}
 
 
       run: |
